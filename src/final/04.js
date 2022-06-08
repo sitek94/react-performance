@@ -4,8 +4,8 @@
 import * as React from 'react'
 import {useVirtual} from 'react-virtual'
 import {useCombobox} from '../use-combobox'
-import {getItems} from '../workerized-filter-cities'
-import {useAsync, useForceRerender} from '../utils'
+import {useForceRerender} from '../utils'
+import {getItems} from 'filter-cities'
 
 const getVirtualRowStyles = ({size, start}) => ({
   position: 'absolute',
@@ -79,10 +79,7 @@ function App() {
   const forceRerender = useForceRerender()
   const [inputValue, setInputValue] = React.useState('')
 
-  const {data: items, run} = useAsync({data: [], status: 'pending'})
-  React.useEffect(() => {
-    run(getItems(inputValue))
-  }, [inputValue, run])
+  const items = React.useMemo(() => getItems(inputValue), [inputValue])
 
   const listRef = React.useRef()
 
